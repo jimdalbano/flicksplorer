@@ -6,102 +6,60 @@ module.exports = function(grunt) {
     pkg: '<json:package.json>',
 
     jshint: {
+      app:  ['src/js/**/*.js'],
+      test: ['test/*_helper.js', 'test/support/**/*.js', 'test/tests/**/*.js'],
       options: {
-        curly:   true,
-        eqeqeq:  true,
-        immed:   true,
-        latedef: true,
-        newcap:  true,
-        noarg:   true,
-        sub:     true,
-        undef:   true,
-        boss:    true,
-        eqnull:  true,
-        browser: true,
-        devel:   true,
-        debug:   true,
-        globals: {
-          // app
-          App:        true,
-          // stackexchange
-          SE:         true,
-          // neuter
-          require:    true,
-          // jquery
-          jQuery:     true,
-          $:          true,
-          // ember
-          Ember:      true,
-          Em:         true,
-          DS:         true,
-          // sinon
-          sinon:      true,
-          // mocha
-          describe:   true,
-          before:     true,
-          after:      true,
-          beforeEach: true,
-          afterEach:  true,
-          it:         true,
-          done:       true,
-          assert:     true,
-          expect:     true,
-          should:     true,
-          setup:      true,
-          teardown:   true,
-          suite:      true,
-          test:       true
-        }
-      },
-
-      app:  ['Gruntfile.js', 'lib/js/**/*.js'],
-      test: ['test/specHelper.js', 'test/support/**/*.js', 'test/specs/**/*.js']
+        jshintrc: '.jshintrc'
+      }
     },
 
     neuter: {
       app: {
-        options: {
-          filepathTransform: function(filepath){ return 'lib/js/' + filepath; }
-        },
-        files: {'www/app.js': ['lib/js/**/*.js']}
+        // src: 'src/app.js',
+        // dest: 'build/app.js'
+        files: {'build/app.js': ['src/**/*.js']}
       },
       test: {
-        options: {
-          filepathTransform: function(filepath){ return 'test/' + filepath; }
-        },
-        files: {'www/tests.js': ['test/specHelper.js', 'test/support/**/*.js', 'test/specs/**/*.js']}
+        src: ['test/*_helper.js', 'test/support/**/*.js', 'test/tests/*.js'],
+        dest: 'build/tests.js'
       }
     },
 
     copy: {
-      app:         {expand: true, cwd: 'lib/', src: ['index.html'], dest: 'www/'},
-      app_css:     {expand: true, cwd: 'lib/css/', src: ['app.css'], dest: 'www/'},
-      app_images:  {expand: true, cwd: 'lib/images/', src: ['*'], dest: 'www/images/'},
-      test:        {expand: true, cwd: 'test/', src: ['test.html'], dest: 'www/'},
-      test_css:    {expand: true, cwd: 'test/vendor/', src: ['mocha.css'], dest: 'www/'},
-      test_images: {expand: true, cwd: 'test/vendor/images', src: ['*'], dest: 'www/images/'}
+      html: {
+        src: 'src/index.html', dest: 'build/index.html'
+      },
+      test_html: {
+        src: 'test/test.html', dest: 'build/test.html'
+      },
+      test_css: {
+        src: 'test/vendor/mocha.css', dest: 'build/mocha.css'
+      },
+      test_images: {
+        expand: true,
+        cwd: 'test/vendor/images',
+        src: ['**'],
+        dest: 'build/images'}
     },
 
     concat: {
       vendor: {
-        files: {'www/vendor.js': [
-          'lib/vendor/js/jquery.js',
-          'lib/vendor/js/ember.js',
-          'lib/vendor/js/ember-data.js'
-        ]}
+        src: ['lib/jquery-1.9.1.js',
+              'lib/handlebars.js',
+              'lib/ember.js',  // 1.0.0-rc.1
+              'lib/ember-data.js'],
+        dest:'build/vendor.js'
       },
       test_vendor: {
-        files: {'www/test_vendor.js': [
-          'test/vendor/mocha.js',
-          'test/vendor/chai.js',
-          'test/vendor/chai-jquery.js',
-          'test/vendor/sinon.js'
-        ]}
+        src: ['test/test_helper.js',
+              'test/vendor/mocha.js',
+              'test/vendor/chai.js'],
+        dest: 'build/test_vendor.js'
       }
     },
 
     notify : {
-      www : {
+      build : {
         options: {
           message : 'Carry on ...',
           title : 'Build complete'
@@ -109,9 +67,20 @@ module.exports = function(grunt) {
       }
     },
 
+    ember_templates: {
+      app: {
+        options: {
+          templateName: function(libFile) {
+            return libFile.replace(/src\/templates\//, '');
+          }
+        },
+        files: {'build/templates.js': ['src/templates/**/*.hbs']}
+      }
+    },
+
     watch: {
-      files: ['Gruntfile.js', 'lib/**/*', 'test/**/*'],
-      tasks: ['app', 'test', 'notify:www']
+      files: ['Gruntfile.js', 'src/**/*', 'lib/**/*', 'test/**/*'],
+      tasks: ['app', 'test', 'notify:build']
     }
 
   });
@@ -122,11 +91,12 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-neuter');
   grunt.loadNpmTasks('grunt-notify');
+  grunt.loadNpmTasks('grunt-ember-templates');
 
-  grunt.registerTask('app', ['jshint:app', 'neuter:app', 'copy:app', 'copy:app_css', 'copy:app_images']);
-  grunt.registerTask('test', ['jshint:test', 'neuter:test', 'copy:test', 'copy:test_css', 'copy:test_images']);
+  grunt.registerTask('app', [/*'jshint:app',*/'ember_templates', 'copy:html',  'neuter:app']);
+  grunt.registerTask('test', [/*'jshint:test',*/ 'neuter:test', 'copy:test_html', 'copy:test_css', 'copy:test_images']);
   grunt.registerTask('vendor', ['concat:vendor', 'concat:test_vendor']);
 
-  grunt.registerTask('default', ['app', 'test', 'vendor', 'notify:www', 'watch']);
 
+  grunt.registerTask('default', ['app', 'test', 'vendor', 'notify:build', 'watch']);
 };

@@ -1,0 +1,14 @@
+<h2>Flickr's Recent Photos</h2>
+
+<h4>Page: {{page}} </h4>
+<h4>Per Page: {{perPage}}</h4>
+
+
+<hr />
+{{#each photo in controller}}
+  <div>
+    <image {{bindAttr src="photo.url_t"}} />
+  </div>
+{{else}}
+  <div>wait for it....</div>
+{{/each}}
