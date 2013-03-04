@@ -111,12 +111,10 @@ App.FlickrModel.reopenClass({
   nojsoncallback: '1',
 
   _query: function(query) {
-    var query = query || {};
+    Ember.assert("No query was supplied for findQuery search", !!query);
     query.format = this.format;
     query.nojsoncallback = this.nojsoncallback;
     query.api_key =  App.FlickrAPIKey;
-
-    query.extras = 'url_sq,url_t,geo'
 
     return query;
   }
@@ -207,7 +205,7 @@ App.Photo.reopenClass({
   getRecent: function(query) {
     var query = this._query(query), results;
     query.method = 'flickr.photos.getRecent';
-
+    query.extras = 'url_sq,url_t,geo'
     return this.find(this._query(query));
   },
 
@@ -220,9 +218,6 @@ App.Photo.reopenClass({
   },
 
   search: function(query) {
-    // getting search critier from the UI and making sure they're
-    // formatted such that flickr can read them.
-
     var query = this._query(query);
 
     // query.bbox = '-70.4319,43.5555,-10.193,43.777';
