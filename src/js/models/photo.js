@@ -12,6 +12,25 @@ App.Photo = App.FlickrModel.extend({
   width_t:    DS.attr('number')
 });
 
+// App.APArray = DS.AdapterPopulatedRecordArray.extend({
+
+//   more: function(references) {
+//     var store = get(this, 'store'), type = get(this, 'type');
+
+//     this.beginPropertyChanges();
+//     // set(this, 'content', Ember.A(references));
+//     references.forEach(function(it,id,en){ this.addReference(it)}, this);
+//     set(this, 'isLoaded', true);
+//     this.endPropertyChanges();
+
+//     var self = this;
+//     // TODO: does triggering didLoad event should be the last action of the runLoop?
+//     Ember.run.once(function() {
+//       self.trigger('didLoad');
+//     });
+//   }
+
+// });
 
 App.Photo.reopenClass({
 
@@ -19,7 +38,8 @@ App.Photo.reopenClass({
     var query = this._query(query), results;
     query.method = 'flickr.photos.getRecent';
     query.extras = 'url_sq,url_t,geo'
-    return this.find(this._query(query));
+    // return this.find(this._query(query));
+    return App.Photo.find(query);
   },
 
   getGetty: function(query) {
