@@ -81,15 +81,22 @@ module.exports = function(grunt) {
 
     watch: {
       files: ['Gruntfile.js', 'src/**/*', 'lib/**/*', 'test/**/*'],
-      tasks: ['app', 'test', 'notify:build', 'casperjs']
+      tasks: ['app', 'test', 'do-sass', 'notify:build', 'casperjs']
     },
 
     casperjs: {
       options: {},
       files:
-        ['test/tests/integration/test1.js']
-    }
+        ['test/tests/integration/site_test.js']
+    },
 
+    sass: {
+      dist: {
+        files: {
+          'build/main.css': 'src/css/main.scss'
+        }
+      }
+    }
   });
 
   grunt.loadNpmTasks('grunt-contrib-copy');
@@ -100,10 +107,12 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-notify');
   grunt.loadNpmTasks('grunt-ember-templates');
   grunt.loadNpmTasks('grunt-casperjs');
+  grunt.loadNpmTasks('grunt-contrib-sass');
 
   grunt.registerTask('app', [/*'jshint:app',*/'ember_templates', 'copy:html',  'neuter:app']);
   grunt.registerTask('test', [/*'jshint:test',*/ 'neuter:test', 'copy:test_html', 'copy:test_css', 'copy:test_images']);
   grunt.registerTask('vendor', ['concat:vendor', 'concat:test_vendor']);
   grunt.registerTask('casp', ['casperjs']);
+  grunt.registerTask('do-sass', ['sass'])
   grunt.registerTask('default', ['app', 'test', 'vendor', 'notify:build', 'watch']);
 };
