@@ -13,7 +13,6 @@
     "grunt-ember-templates": "git://github.com/dgeb/grunt-ember-templates.git"
   },
   "devDependencies": {
-    "casper-chai": "0.1.6",
     "grunt-casperjs": "1.0.6"
   }
 }

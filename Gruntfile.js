@@ -81,7 +81,7 @@ module.exports = function(grunt) {
 
     watch: {
       files: ['Gruntfile.js', 'src/**/*', 'lib/**/*', 'test/**/*'],
-      tasks: ['app', 'test', 'notify:build']
+      tasks: ['app', 'test', 'notify:build', 'casperjs']
     },
 
     casperjs: {
