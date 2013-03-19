@@ -15,12 +15,14 @@ module.exports = function(grunt) {
 
     neuter: {
       app: {
-        // src: 'src/app.js',
-        // dest: 'build/app.js'
-        files: {'build/app.js': ['src/**/*.js']}
+        options: {
+          filepathTransform: function(filepath){ return 'src/js/' + filepath; }
+        },
+        src: 'src/js/**/app.js',
+        dest: 'build/app.js'
       },
       test: {
-        src: ['test/*_helper.js', 'test/tests/unit/**/*.js'],
+        src: ['test/test/unit/*_helper.js', 'test/tests/unit/**/*.js'],
         dest: 'build/tests.js'
       }
     },
@@ -75,7 +77,7 @@ module.exports = function(grunt) {
             return libFile.replace(/src\/templates\//, '');
           }
         },
-        files: {'build/templates.js': ['src/templates/**/*.hbs']}
+        files: {'build/templates.js': ['src/js/templates/**/*.hbs']}
       }
     },
 
