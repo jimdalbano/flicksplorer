@@ -1,5 +1,7 @@
 Em = Ember;
-App = Em.Application.create();
+App = Em.Application.create({
+  rootElement: '#app'
+});
 
 require('src/flickr/flickr');
 require('src/store');
