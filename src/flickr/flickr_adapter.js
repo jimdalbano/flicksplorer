@@ -23,7 +23,7 @@ App.FlickrAdapter = DS.RESTAdapter.extend({
       if (payload.stat === 'ok') {
       // if (payload.photos && payload.photos.page) {
         recordArray.set('page', payload.photos.page);
-        recordArray.set('perPage', payload.photos.perpage);
+        recordArray.set('per_page', payload.photos.perpage);
         recordArray.set('pages', payload.photos.pages);
         recordArray.set('total', payload.photos.total);
       }
@@ -65,4 +65,4 @@ App.FlickrAdapter = DS.RESTAdapter.extend({
 });
 
 // Need this or the serializer won't know what's going on.
-App.FlickrAdapter.map('App.Photo', {});
+App.FlickrAdapter.map('App.Photo', {meta: 'stat'});

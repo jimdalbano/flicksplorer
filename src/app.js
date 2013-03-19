@@ -5,6 +5,5 @@ require('src/flickr/flickr');
 require('src/store');
 
 
-require('src/controllers/recent_photos_controller');
-
-require('src/router');
+require('src/routes/router');
+require('src/misc/recent_photos');

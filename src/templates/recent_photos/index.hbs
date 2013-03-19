@@ -1,14 +1,9 @@
 <h2>Flickr's Recent Photos</h2>
-
 <h4>Page: {{page}} </h4>
 <h4>Per Page: {{perPage}}</h4>
-
-
+<h4>Total: {{total}}</h4>
+<button {{action "nextPage"}}>Next Page</button>
+<button {{action "looksy"}}>Looksy</button>
 <hr />
-{{#each photo in controller}}
-  <div>
-    <image {{bindAttr src="photo.url_t"}} />
-  </div>
-{{else}}
-  <div>wait for it....</div>
-{{/each}}
+{{outlet}}
+
