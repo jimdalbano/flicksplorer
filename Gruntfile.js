@@ -20,7 +20,7 @@ module.exports = function(grunt) {
         files: {'build/app.js': ['src/**/*.js']}
       },
       test: {
-        src: ['test/*_helper.js', 'test/support/**/*.js', 'test/tests/*.js'],
+        src: ['test/*_helper.js', 'test/tests/unit/**/*.js'],
         dest: 'build/tests.js'
       }
     },
@@ -51,9 +51,10 @@ module.exports = function(grunt) {
         dest:'build/vendor.js'
       },
       test_vendor: {
-        src: ['test/test_helper.js',
-              'test/vendor/mocha.js',
-              'test/vendor/chai.js'],
+        src: ['test/vendor/mocha.js',
+              'test/vendor/chai.js',
+              'test/vendor/chai-jquery.js',
+              'test/vendor/sinon-1.6.0.js'],
         dest: 'build/test_vendor.js'
       }
     },
@@ -81,6 +82,12 @@ module.exports = function(grunt) {
     watch: {
       files: ['Gruntfile.js', 'src/**/*', 'lib/**/*', 'test/**/*'],
       tasks: ['app', 'test', 'notify:build']
+    },
+
+    casperjs: {
+      options: {},
+      files:
+        ['test/tests/integration/test1.js']
     }
 
   });
@@ -92,11 +99,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-neuter');
   grunt.loadNpmTasks('grunt-notify');
   grunt.loadNpmTasks('grunt-ember-templates');
+  grunt.loadNpmTasks('grunt-casperjs');
 
   grunt.registerTask('app', [/*'jshint:app',*/'ember_templates', 'copy:html',  'neuter:app']);
   grunt.registerTask('test', [/*'jshint:test',*/ 'neuter:test', 'copy:test_html', 'copy:test_css', 'copy:test_images']);
   grunt.registerTask('vendor', ['concat:vendor', 'concat:test_vendor']);
-
-
+  grunt.registerTask('casp', ['casperjs']);
   grunt.registerTask('default', ['app', 'test', 'vendor', 'notify:build', 'watch']);
 };
