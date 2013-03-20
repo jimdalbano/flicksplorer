@@ -18,13 +18,15 @@ App.RecentPhotos = Em.ArrayProxy.extend(Ember.DeferredMixin, {
 
   makePhoto: function(row, data) {
     row.set('id', data.id);
+    /*jslint camelcase: false */
     row.set('url_sq', data.url_sq);
+    /*jslint camelcase: true */
     row.set('farm', data.farm);
     row.set('isLoaded', true);
   },
 
 objectAt: function(index) {
-    if (index == -1) {return null;}
+    if (index === -1) {return null;}
 
     var content = this.get('content'),
         record = content[index];
@@ -50,6 +52,7 @@ objectAt: function(index) {
         isLoaded: false }));
     }
 
+    /*jslint camelcase: false */
     queryStringArgs = { api_key: "f9a3a8cbe838942e08ce5269507f56ca",
                         format: 'json',
                         nojsoncallback: '1',
@@ -57,11 +60,12 @@ objectAt: function(index) {
                         page: page,
                         per_page: this.get('perPage'),
                         extras: 'url_sq' };
+    /*jslint camelcase: true */
 
     queryString = jQuery.param(queryStringArgs);
     url = [url, queryString].join('?');
 
-    var s_fn = function(json) {
+    var success = function(json) {
       this.set('total', json['photos']['total']);
       root = json['photos']['photo'];
       root.forEach(function(item, index, enumerable) {
@@ -70,7 +74,7 @@ objectAt: function(index) {
       }, this);
     };
 
-    this.ajax(url, 'GET', {success: s_fn});
+    this.ajax(url, 'GET', {success: success});
   },
 
   ajax: function(url, type, hash) {
@@ -79,7 +83,7 @@ objectAt: function(index) {
     hash.dataType = 'json';
     hash.context = this;
 
-    if (hash.data && type != 'GET') {
+    if (hash.data && type !== 'GET') {
       hash.data = JSON.stringify(hash.data);
     }
 

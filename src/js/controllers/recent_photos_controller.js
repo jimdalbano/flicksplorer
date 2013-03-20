@@ -18,7 +18,7 @@ App.RecentPhotosController = Em.ArrayController.extend({
     var content = this.get('content'),
         currPage = this.get('page');
     this.set('loading', true);
-    content.loadNextPage()
+    content.loadNextPage();
     this.set('loading', false);
   }
 });

@@ -14,4 +14,4 @@ App.PaginatedController = Em.ArrayController.extend({
   }.property('content.total'),
 
   nextPage: Ember.K
-})
+});

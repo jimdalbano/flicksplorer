@@ -38,30 +38,31 @@ App.Photo = App.FlickrModel.extend({
 App.Photo.reopenClass({
 
   getRecent: function(query) {
-    var query = this._query(query), results;
-    query.method = 'flickr.photos.getRecent';
-    query.extras = 'url_sq,url_t,geo'
-    // return this.find(this._query(query));
-    return App.Photo.find(query);
+    var qry = this._query(query), results;
+    qry.method = 'flickr.photos.getRecent';
+    qry.extras = 'url_sq,url_t,geo';
+    return App.Photo.find(qry);
   },
 
   getGetty: function(query) {
-    var query = this._query(query);
-    query.is_getty = true;
-    query.method = 'flickr.photos.search';
+    var qry = this._query(query);
+    /*jslint camelcase: false */
+    qry.is_getty = true;
+    /*jslint camelcase: true */
+    qry.method = 'flickr.photos.search';
 
-    return this.find(query);
+    return this.find(qry);
   },
 
   search: function(query) {
-    var query = this._query(query);
+    var qry = this._query(query);
 
-    // query.bbox = '-70.4319,43.5555,-10.193,43.777';
-    // query.min_upload_date = '2013-01-01 00:00:00';
+    // qry.bbox = '-70.4319,43.5555,-10.193,43.777';
+    // qry.min_upload_date = '2013-01-01 00:00:00';
 
-    query.method = 'flickr.photos.search';
+    qry.method = 'flickr.photos.search';
 
-    return this.find(query);
+    return this.find(qry);
   }
 
 });

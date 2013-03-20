@@ -19,7 +19,10 @@
     "ok": true,
     "sinon": true,
     "require": true,
+    "jQuery": true,
     "Ember": true,
-    "Todos": true
+    "Em": true,
+    "DS": true,
+    "App": true
   }
 }

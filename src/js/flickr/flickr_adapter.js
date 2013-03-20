@@ -54,7 +54,7 @@ App.FlickrAdapter = DS.RESTAdapter.extend({
     // hash.contentType = 'application/json; charset=utf-8';
     hash.context = this;
 
-    if (hash.data && type != 'GET') {
+    if (hash.data && type !== 'GET') {
       hash.data = JSON.stringify(hash.data);
     }
 

@@ -11,8 +11,9 @@ App.FlickrModel.reopenClass({
     Ember.assert("No query was supplied for findQuery search", !!query);
     query.format = this.format;
     query.nojsoncallback = this.nojsoncallback;
+    /*jslint camelcase: false */
     query.api_key =  App.FlickrAPIKey;
-
+    /*jslint camelcase: true */
     return query;
   }
 
