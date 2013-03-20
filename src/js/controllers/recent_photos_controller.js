@@ -1,3 +1,5 @@
+require('app');
+
 App.RecentPhotosController = Em.ArrayController.extend({
 
   page: function() {

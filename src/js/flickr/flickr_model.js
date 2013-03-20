@@ -1,4 +1,5 @@
-require('src/flickr/flickr_api_key');
+require('flickr/flickr_api_key');
+require('flickr/flickr');
 
 App.FlickrModel = DS.Model.extend({});
 

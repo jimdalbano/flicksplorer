@@ -1,4 +1,4 @@
-require('/app');
+require('app');
 
 App.PaginatedController = Em.ArrayController.extend({
   page: function() {

@@ -1,3 +1,6 @@
+require('app');
+
+
 App.Photo = App.FlickrModel.extend({
   title:      DS.attr('string'),
   owner:      DS.attr('string'),

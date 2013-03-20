@@ -1,3 +1,5 @@
+require('app');
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
   A lazy loading paginated data source. This technique shamelessly lifted

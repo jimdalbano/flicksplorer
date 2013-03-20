@@ -1,4 +1,7 @@
-var get = Ember.get, set = Ember.set
+require('flickr/flickr');
+require('flickr/flickr_serializer');
+
+var get = Ember.get, set = Ember.set;
 
 App.FlickrAdapter = DS.RESTAdapter.extend({
 
