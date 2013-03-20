@@ -5,3 +5,6 @@ scratch.txt
 *.sublime-project
 *.sublime-workspace
 *api_key.js
+
+.sass-cache
+build
