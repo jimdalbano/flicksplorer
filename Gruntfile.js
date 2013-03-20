@@ -18,7 +18,7 @@ module.exports = function(grunt) {
         options: {
           filepathTransform: function(filepath){ return 'src/js/' + filepath; }
         },
-        src: 'src/js/**/app.js',
+        src: 'src/js/**/*.js',
         dest: 'build/app.js'
       },
       test: {
@@ -46,10 +46,11 @@ module.exports = function(grunt) {
 
     concat: {
       vendor: {
-        src: ['lib/jquery-1.9.1.js',
-              'lib/handlebars.js',
-              'lib/ember.js',  // 1.0.0-rc.1
-              'lib/ember-data.js'],
+        src: ['src/vendor/js/jquery-1.9.1.js',
+              'src/vendor/js/handlebars.js',
+              'src/vendor/js/ember.js',
+              'src/vendor/js/ember-data.js',
+              'src/vendor/js/boostrap.js'],
         dest:'build/vendor.js'
       },
       test_vendor: {
