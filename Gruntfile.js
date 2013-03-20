@@ -19,17 +19,24 @@ module.exports = function(grunt) {
           filepathTransform: function(filepath){ return 'src/js/' + filepath; }
         },
         src: 'src/js/**/*.js',
-        dest: 'build/app.js'
+        dest: 'build/app/app.js'
       },
-      test: {
-        src: ['test/test/unit/*_helper.js', 'test/tests/unit/**/*.js'],
-        dest: 'build/tests.js'
+      test_unit: {
+        src: ['test/tests/unit/**/*.js'],
+        dest: 'build/unit_tests.js'
+      },
+      test_acceptance: {
+        src: ['test/tests/acceptance/**/*.js'],
+        dest: 'build/acceptance_tests.js'
       }
     },
 
     copy: {
-      html: {
-        src: 'src/index.html', dest: 'build/index.html'
+      app: {
+        files: [
+          {src: 'src/index.html', dest: 'build/app/index.html'},
+          {expand: true, cwd: 'src/images', src: ['**'], dest: 'build/app/images'},
+        ]
       },
       test_html: {
         src: 'test/test.html', dest: 'build/test.html'
@@ -51,9 +58,9 @@ module.exports = function(grunt) {
               'src/vendor/js/ember.js',
               'src/vendor/js/ember-data.js',
               'src/vendor/js/boostrap.js'],
-        dest:'build/vendor.js'
+        dest:'build/app/vendor.js'
       },
-      test_vendor: {
+      vendor_test: {
         src: ['test/vendor/mocha.js',
               'test/vendor/chai.js',
               'test/vendor/chai-jquery.js',
@@ -78,25 +85,47 @@ module.exports = function(grunt) {
             return libFile.replace(/src\/templates\//, '');
           }
         },
-        files: {'build/templates.js': ['src/js/templates/**/*.hbs']}
+        files: {'build/app/templates.js': ['src/js/templates/**/*.hbs']}
       }
     },
 
     watch: {
-      files: ['Gruntfile.js', 'src/**/*', 'lib/**/*', 'test/**/*'],
-      tasks: ['app', 'test', 'do-sass', 'notify:build', 'casperjs']
+      src: {
+        files: ['src/js/**/*.js'],
+        tasks: ['build_js']
+      },
+      css: {
+        files: ['src/css/**/*.css', 'src/css/**/*.scss'],
+        tasks: ['build_css']
+      },
+      assets: {
+        files: ['src/index.html', 'src/images/**'],
+        tasks: ['build_asssets']
+      },
+      vendor: {
+        files: ['src/vendor/**/*.js'],
+        tasks: ['build_vendor', 'notify:build']
+      },
+      test_acceptance: {
+        files: ['test/tests/acceptance/**/*.js'],
+        tasks: ['casperjs']
+      },
+      test_unit: {
+        files: ['test/tests/unit/**/*.js'],
+        tasks: ['build_js_test_unit']
+      }
     },
 
     casperjs: {
       options: {},
       files:
-        ['test/tests/integration/site_test.js']
+        ['test/tests/acceptance/**/*.js']
     },
 
     sass: {
-      dist: {
+      app: {
         files: {
-          'build/main.css': 'src/css/main.scss'
+          'build/app/main.css': 'src/css/main.scss'
         }
       }
     }
@@ -112,10 +141,18 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-casperjs');
   grunt.loadNpmTasks('grunt-contrib-sass');
 
-  grunt.registerTask('app', [/*'jshint:app',*/'ember_templates', 'copy:html',  'neuter:app']);
-  grunt.registerTask('test', [/*'jshint:test',*/ 'neuter:test', 'copy:test_html', 'copy:test_css', 'copy:test_images']);
-  grunt.registerTask('vendor', ['concat:vendor', 'concat:test_vendor']);
-  grunt.registerTask('casp', ['casperjs']);
-  grunt.registerTask('do-sass', ['sass'])
-  grunt.registerTask('default', ['app', 'test', 'vendor', 'notify:build', 'watch']);
+  grunt.registerTask('build_js', [/*'jshint:app',*/ 'ember_templates', 'neuter:app',  'notify:build'] );
+  grunt.registerTask('build_js_test_unit', [/*'jshint:test_unit',*/, 'neuter:test_unit']);
+  grunt.registerTask('build_js_test_acceptance', [/*'jshint:test_acceptance'*/])
+  grunt.registerTask('build_css', ['sass:app']);
+  grunt.registerTask('build_assets', ['copy:app']);
+  grunt.registerTask('build_vendor', ['concat:vendor', 'notify:build']);
+  grunt.registerTask('build_vendor_test', ['concat:vendor_test']);
+
+  grunt.registerTask('build', ['build_js', 'build_css', 'build_assets', 'build_vendor']);
+
+  // Build ALL the tests, and run the acceptance. Leave the unit tests up to me to deal with.
+  grunt.registerTask('test', ['build_js_test_unit', 'build_js_test_acceptance', 'build_vendor_test',  'casperjs'])
+
+  grunt.registerTask('default', ['build', 'test', 'watch']);
 };
